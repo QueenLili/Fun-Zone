@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Play Zone</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #ffe6f2;
+      color: #d23369;
+      transition: background 0.5s;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #ff0066;
+      margin: 20px 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      margin: 10px;
+      background: #ff3385;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn:hover {
+      background: #e60073;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .page {
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Home Page */
+    #home {
+      display: block;
+    }
+    
+    .love-message {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      margin: 30px 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    /* Wheel Page */
+    .wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 30px auto;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 8px solid #ff99cc;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    
+    .wheel {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-origin: center;
+      transition: transform 4s cubic-bezier(0.17, 0.67, 0.21, 0.99);
+    }
+    
+    .slice {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      transform-origin: center center;
+      text-align: right;
+      padding-right: 10px;
+      padding-top: 110px;
+      font-weight: bold;
+      font-size: 15px;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
+    }
+    
+
+    .slice:nth-child(1) { transform: rotate(10deg); background: #ff6699; }
+    .slice:nth-child(2) { transform: rotate(60deg); background: #ff9966; }
+    .slice:nth-child(3) { transform: rotate(120deg); background: #ffcc66; }
+    .slice:nth-child(4) { transform: rotate(180deg); background: #99cc66; }
+    .slice:nth-child(5) { transform: rotate(240deg); background: #66cccc; }
+    .slice:nth-child(6) { transform: rotate(300deg); background: #cc99ff; }
+    
+    
+    .pointer {
+      position: absolute;
+      top: 0px;
+      left: 45%;
+      transform: translateX(-50%);
+      transform: rotateX(180deg);
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #e60073;
+      z-index: 10;
+    }
+    
+    /* Love Calculator */
+    .calculator {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      margin: 30px auto;
+      max-width: 400px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+      border: 2px solid #ffb3d9;
+      border-radius: 5px;
+    }
+    
+    .result {
+      font-size: 24px;
+      margin: 20px;
+      color: #ff0066;
+    }
+    
+    /* Audio Zone */
+    .song {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      max-width: 400px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Catch Hearts Game */
+    #game-area {
+      width: 100%;
+      height: 400px;
+      background: #fff0f5;
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px dashed #ff99cc;
+    }
+    
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    #score {
+      font-size: 24px;
+      margin: 10px;
+    }
+    
+    /* Back Button */
+    .back-btn {
+      background: #ff99cc;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Page -->
+  <div id="home" class="page">
+    <div class="container">
+      <h1>💖 Love Play Zone 💖</h1>
+      <div class="love-message">
+        <p style="font-size: 18px; line-height: 1.6; margin-bottom: 20px;">
+          I'm so sorry I messed up our love...<br>
+          But here's a little fun zone to remind you<br>
+          of all the fun and love we share ❤️. I love you forever, to the ends of the Milkyway and back.
+        </p>
+        <img src="https://i.gifer.com/y2.gif" style="width: 150px; border-radius: 10px; margin: 10px;">
+      </div>
+      
+      <button class="btn" onclick="showPage('wheel')">Wheel of Love</button>
+      <button class="btn" onclick="showPage('calculator')">Love Calculator</button>
+      <button class="btn" onclick="showPage('audio')">Audio Zone</button>
+      <button class="btn" onclick="showPage('game')">Catch the Hearts</button>
+    </div>
+  </div>
+  
+  <!-- Wheel of Love Page -->
+  <div id="wheel-page" class="page">
+    <div class="container">
+      <h1>🎡 Wheel of Love 💘</h1>
+      <div class="wheel-container">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel">
+          <div class="slice">💋 A kiss</div>
+          <div class="slice">🎮 Game night</div>
+          <div class="slice">🎬 Movie date</div>
+          <div class="slice">📝 Love letter</div>
+          <div class="slice">⚡ A Monster</div>
+          <div class="slice">🧸 Big hug</div>
+        </div>
+      </div>
+      <button class="btn" id="spin-btn">Spin Now!</button>
+      <button class="btn back-btn" onclick="showPage('home')">Back to Home</button>
+    </div>
+  </div>
+  
+  <!-- Love Calculator Page -->
+  <div id="calculator-page" class="page">
+    <div class="container">
+      <h1>💑 Love Calculator 💞</h1>
+      <div class="calculator">
+        <input type="text" id="name1" placeholder="Your Name">
+        <input type="text" id="name2" placeholder="Their Name">
+        <button class="btn" onclick="calculateLove()">Calculate Love</button>
+        <div class="result" id="love-result">?</div>
+        <p id="love-message"></p>
+      </div>
+      <button class="btn back-btn" onclick="showPage('home')">Back to Home</button>
+    </div>
+  </div>
+  
+  <!-- Audio Zone Page -->
+  <div id="audio-page" class="page">
+    <div class="container">
+      <h1>🎵 Audio Zone 🎧</h1>
+      <p style="margin-bottom: 20px;">Songs that remind me of you...</p>
+      
+      <div class="song">
+        <h3>Perfect - Ed Sheeran & Andrea Bocelli</h3>
+        <audio controls style="width: 100%;">
+          <source src="Ed Sheeran, Perfect Symphony ft. Andrea Bocelli (lyrics & translate).mp3" type="audio/mpeg">
+        </audio>
+        <p>"Because we danced to this and it was one of the most romantic moments we had"</p>
+      </div>
+      
+      <div class="song">
+        <h3>Can't Help Falling in Love - Elvis (Cover)</h3>
+        <audio controls style="width: 100%;">
+          <source src="Kina Grannis - Can't Help Falling In Love (From Crazy Rich Asians).mp3" type="audio/mpeg">
+        </audio>
+        <p>"My heart just melts for you. I can't help but love you."</p>
+      </div>
+      
+      <div class="song">
+        <h3>That Part - Lauren Spencer Smith</h3>
+        <audio controls style="width: 100%;">
+          <source src="Lauren Spencer Smith - That Part.mp3" type="audio/mpeg">
+        </audio>
+        <p>"Because I knew from the start that I wanna skip to that part."</p>
+      </div>
+      
+      <button class="btn back-btn" onclick="showPage('home')">Back to Home</button>
+    </div>
+  </div>
+  
+  <!-- Catch Hearts Game Page -->
+  <div id="game-page" class="page">
+    <div class="container">
+      <h1>💘 Catch the Hearts 💘</h1>
+      <p>Catch as many hearts as you can in 30 seconds!</p>
+      <div id="score">Score: 0</div>
+      <div id="game-area"></div>
+      <button class="btn" id="start-btn">Start Game</button>
+      <button class="btn back-btn" onclick="showPage('home')">Back to Home</button>
+    </div>
+  </div>
+
+  <script>
+    // Page Navigation
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.style.display = 'none';
+      });
+      document.getElementById(pageId === 'home' ? 'home' : `${pageId}-page`).style.display = 'block';
+      
+      // Reset game when leaving
+      if (pageId !== 'game') {
+        clearInterval(gameInterval);
+        gameArea.innerHTML = '';
+        score = 0;
+        document.getElementById('score').textContent = 'Score: 0';
+      }
+    }
+    
+    // Wheel of Love
+    const wheel = document.getElementById("wheel");
+    const spinBtn = document.getElementById("spin-btn");
+    let deg = 0;
+    let isSpinning = false;
+    
+    spinBtn.addEventListener("click", () => {
+      if (isSpinning) return;
+      isSpinning = true;
+      spinBtn.disabled = true;
+      
+      const extraDeg = Math.floor(Math.random() * 60);
+      const prizeIndex = Math.floor(Math.random() * 6);
+      deg += (360 * 5) + (prizeIndex * 60) + extraDeg;
+      
+      wheel.style.transform = `rotate(${deg}deg)`;
+      
+      setTimeout(() => {
+        isSpinning = false;
+        spinBtn.disabled = false;
+        alert(`You won: ${['A kiss 💋', 'Pizza night 🍕', 'Movie date 🎬', 'Love letter 📝', 'Your song 🎶', 'Bear hug 🧸'][prizeIndex]}!`);
+      }, 5000);
+    });
+    
+    // Love Calculator
+    function calculateLove() {
+      const name1 = document.getElementById('name1').value.trim() || "You";
+      const name2 = document.getElementById('name2').value.trim() || "Me";
+      
+      // Fun calculation (not scientific!)
+      const lovePercent = Math.floor(Math.random() * 30) + 70; // Always 70-100%
+      
+      document.getElementById('love-result').textContent = `${lovePercent}%`;
+      
+      const messages = [
+        "Perfect match! Soulmates forever!",
+        "Incredible connection!",
+        "True love never felt so right!",
+        "You two are meant to be!",
+        "A love story for the ages!"
+      ];
+      
+      document.getElementById('love-message').textContent = messages[Math.floor(Math.random() * messages.length)];
+    }
+    
+    // Catch Hearts Game
+    const gameArea = document.getElementById('game-area');
+    const startBtn = document.getElementById('start-btn');
+    let score = 0;
+    let gameInterval;
+    let gameTime = 30;
+    
+    startBtn.addEventListener('click', startGame);
+    
+    function startGame() {
+      score = 0;
+      gameTime = 30;
+      gameArea.innerHTML = '';
+      document.getElementById('score').textContent = `Score: ${score}`;
+      startBtn.disabled = true;
+      
+      // Countdown timer
+      const timer = setInterval(() => {
+        gameTime--;
+        if (gameTime <= 0) {
+          clearInterval(timer);
+          clearInterval(gameInterval);
+          startBtn.disabled = false;
+          alert(`Game over! Final score: ${score}`);
+        }
+      }, 1000);
+      
+      // Create hearts
+      gameInterval = setInterval(createHeart, 800);
+    }
+    
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = '❤️';
+      heart.style.left = Math.random() * (gameArea.offsetWidth - 30) + 'px';
+      heart.style.top = '0px';
+      heart.style.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+      heart.style.fontSize = `${Math.random() * 20 + 20}px`;
+      
+      heart.addEventListener('click', () => {
+        score++;
+        document.getElementById('score').textContent = `Score: ${score}`;
+        heart.remove();
+      });
+      
+      gameArea.appendChild(heart);
+      
+      // Animate falling
+      let pos = 0;
+      const fall = setInterval(() => {
+        pos += 5;
+        heart.style.top = pos + 'px';
+        
+        if (pos > gameArea.offsetHeight) {
+          clearInterval(fall);
+          heart.remove();
+        }
+      }, 50);
+    }
+  </script>
+</body>
+</html>
